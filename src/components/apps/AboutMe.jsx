@@ -1,10 +1,9 @@
 import React from "react";
 import { 
-  FaGithub, FaExternalLinkAlt, FaChevronLeft, FaGraduationCap, 
-  FaBriefcase, FaAward, FaUserCircle, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCogs 
+  FaExternalLinkAlt, FaGraduationCap, 
+  FaBriefcase, FaAward, FaEnvelope, FaPhone, FaMapMarkerAlt, FaCogs 
 } from "react-icons/fa";
 import { Document, Page, pdfjs } from "react-pdf";
-import { skills, githubRepos } from "../../data/data";
 import Sponsor from "./Sponsor";
 import Projects from "./Projects";
 
@@ -30,7 +29,7 @@ const ProjectCard = ({ title, description, tech = [], link = "#" }) => (
 );
 
 const AboutMe = ({ page, handleDivClick, expandedDiv }) => {
-  const [resumeUrl, setResumeUrl] = React.useState("/docs/resume.pdf");
+  const resumeUrl = "/docs/resume.pdf";
   const [numPages, setNumPages] = React.useState(null);
   const [pageNumber, setPageNumber] = React.useState(1);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -48,14 +47,7 @@ const AboutMe = ({ page, handleDivClick, expandedDiv }) => {
     setError("Failed to load PDF. Please try opening it in a new tab.");
   };
 
-  const handleResumeClick = async () => {
-    setIsLoading(true);
-    // Simulate loading delay for attractive effect
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    // Open resume in new tab
-    window.open(resumeUrl, '_blank');
-    setIsLoading(false);
-  };
+  // Resume opens directly via the Document viewer or download link
 
   // Style kwa ajili ya scrollbar
   const scrollStyle = {
@@ -679,7 +671,7 @@ const AboutMe = ({ page, handleDivClick, expandedDiv }) => {
         );
 
       default:
-        return <div className="text-white p-10 font-mono italic">// 404: Not Found</div>;
+        return <div className="text-white p-10 font-mono italic">404: Not Found</div>;
 
       case "Projects":
         return <Projects />;

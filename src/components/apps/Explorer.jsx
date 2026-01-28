@@ -14,7 +14,6 @@ import {
   MdNavigateNext,
   MdSearch,
   MdExpandMore,
-  MdFavorite,
   MdChevronRight,
   MdPushPin,
 } from "react-icons/md";
