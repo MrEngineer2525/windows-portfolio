@@ -348,22 +348,23 @@ const ProjectCard = ({ project, isExpanded, onClick }) => {
 
           {/* Action Buttons */}
           <div className="flex gap-2">
-              <a
-                href="#"
-                onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
-                className="flex-1 flex items-center justify-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-2 border-white/30 hover:border-white/60 px-4 py-2.5 rounded-xl font-bold text-sm text-white transition-transform duration-300 ease-in-out transform-gpu hover:scale-105 hover:shadow-lg group/btn"
-              >
-                <FaGithub size={14} className="group-hover/btn:rotate-12 transition-transform duration-100" />
-                <span>Code</span>
-              </a>
-            <a
-              href="#"
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); if (project.github) window.open(project.github, '_blank'); }}
+              className="flex-1 flex items-center justify-center gap-2 bg-neutral-700 hover:bg-neutral-600 border-2 border-white/30 hover:border-white/60 px-4 py-2.5 rounded-xl font-bold text-sm text-white transition-transform duration-300 ease-in-out transform-gpu hover:scale-105 hover:shadow-lg group/btn"
+            >
+              <FaGithub size={14} className="group-hover/btn:rotate-12 transition-transform duration-100" />
+              <span>Code</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); if (project.live) window.open(project.live, '_blank'); }}
               className={`flex-1 flex items-center justify-center gap-2 bg-gradient-to-r ${colorMap[project.color]} hover:brightness-110 px-4 py-2.5 rounded-xl font-bold text-sm text-white transition-transform duration-300 ease-in-out transform-gpu hover:scale-105 hover:shadow-lg group/btn`}
             >
               <FaExternalLinkAlt size={14} className="group-hover/btn:translate-x-1 transition-transform duration-100" />
               <span>Live</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -683,8 +684,9 @@ const Projects = () => {
                 See more projects, contributions, and case studies on my GitHub — let's build something modern together.
               </p>
             </div>
-            <a
-              href="#"
+            <button
+              type="button"
+              onClick={() => window.open('https://github.com', '_blank')}
               className="group/btn relative inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-8 py-4 rounded-2xl font-bold text-white transition-transform duration-300 ease-in-out hover:scale-105 whitespace-nowrap shadow-lg"
             >
               <span className="inline-flex items-center justify-center h-9 w-9 rounded-full bg-white/10 group-hover:bg-white/20 transition-colors"> 
@@ -692,7 +694,7 @@ const Projects = () => {
               </span>
               <span>View All on GitHub</span>
               <FaArrowRight className="ml-2 transform transition-transform duration-300 ease-in-out group-hover:translate-x-2" size={16} />
-            </a>
+            </button>
           </div>
         </div>
 

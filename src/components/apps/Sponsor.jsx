@@ -3,8 +3,6 @@ import { motion } from 'framer-motion';
 
 export default function Sponsor() {
   const [hoveredCard, setHoveredCard] = useState(null);
-  const [lordLoaded, setLordLoaded] = useState(false);
-  const [LottiePlayer, setLottiePlayer] = useState(null);
 
   const sponsorshipTiers = [
     {
@@ -89,59 +87,7 @@ export default function Sponsor() {
     }
   ];
 
-  // small inline SVG logo generator to ensure visible, reliable placeholders
-  const makeLogoDataUrl = (label, color = '#06b6d4') => {
-    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='240' height='80'><rect width='100%' height='100%' rx='8' fill='${color}' opacity='0.15'/><text x='50%' y='52%' dominant-baseline='middle' text-anchor='middle' font-family='Inter, Arial, sans-serif' font-size='16' fill='white' opacity='0.95'>${label}</text></svg>`;
-    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-  };
-
-  // dynamically load Lordicon script for animated icons
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    // If already registered as a custom element, mark loaded.
-    if (window.customElements && window.customElements.get && window.customElements.get('lord-icon')) {
-      setLordLoaded(true);
-      return;
-    }
-
-    // If a script tag for lordicon exists (we added it to index.html), attach load listener.
-    const existingScript = Array.from(document.scripts).find((s) => s.src && s.src.includes('lordicon'));
-    if (existingScript) {
-      if (existingScript.getAttribute('data-lordicon-loaded')) {
-        setLordLoaded(true);
-        return;
-      }
-      existingScript.addEventListener('load', () => {
-        existingScript.setAttribute('data-lordicon-loaded', '1');
-        setLordLoaded(true);
-      });
-      // if already complete
-      if (existingScript.readyState === 'complete' || existingScript.readyState === 'loaded') {
-        existingScript.setAttribute('data-lordicon-loaded', '1');
-        setLordLoaded(true);
-      }
-      return;
-    }
-
-    // fallback: inject script if none exists (keeps previous behavior)
-    const s = document.createElement('script');
-    s.src = 'https://cdn.lordicon.com/lordicon.js';
-    s.async = true;
-    s.setAttribute('data-lordicon', '1');
-    s.onload = () => { s.setAttribute('data-lordicon-loaded', '1'); setLordLoaded(true); };
-    document.body.appendChild(s);
-  }, []);
-
-  // lazy-load react-lottie-player at runtime (optional). If not installed, we fall back to inline SVGs.
-  React.useEffect(() => {
-    let mounted = true;
-    import('react-lottie-player').then((mod) => {
-      if (mounted && mod && mod.Player) setLottiePlayer(() => mod.Player);
-    }).catch(() => {
-      // no-op: player not available, we'll use local SVGs
-    });
-    return () => { mounted = false; };
-  }, []);
+  // Note: removed external Lordicon + Lottie runtime helpers to avoid unused vars
 
   const stats = [
     { number: "1000+", label: "Lines of Code", icon: "💻" },
@@ -179,121 +125,7 @@ export default function Sponsor() {
     window.open(`https://wa.me/255711311363?text=${encodedMessage}`, '_blank');
   };
 
-  // Imperative mount helper for lord-icon custom element
-  function LordIconMount({ src, size = '36px', loaded }) {
-    const mountRef = React.useRef(null);
-    React.useEffect(() => {
-      const mount = mountRef.current;
-      if (!mount) return;
-      // clear previous
-      mount.innerHTML = '';
-      if (loaded && window.customElements && window.customElements.get && window.customElements.get('lord-icon')) {
-        const el = document.createElement('lord-icon');
-        el.setAttribute('src', src);
-        el.setAttribute('trigger', 'loop');
-        el.setAttribute('colors', 'primary:#ffffff,secondary:#08a88a');
-        el.style.width = size;
-        el.style.height = size;
-        mount.appendChild(el);
-      }
-      return () => { if (mount) mount.innerHTML = ''; };
-    }, [src, size, loaded]);
-    return <div ref={mountRef} className="flex items-center justify-center" style={{ width: size, height: size }} />;
-  }
-
-  // Inline animated SVG logo (local, polished variants per tier)
-  function InlineLogo({ tierIndex = 0, variant = 0, label = '' }) {
-    const id = `logo-${tierIndex}-${variant}`;
-    const size = { w: 36, h: 24 };
-    const palettes = [
-      ['#06b6d4', '#7c3aed'], // cyan -> purple
-      ['#10b981', '#06b6d4'], // green -> cyan
-      ['#f97316', '#ef4444']  // orange -> red
-    ];
-    const colors = palettes[tierIndex % palettes.length];
-
-    // Tier-specific artwork
-    if (tierIndex === 0) {
-      // Supporter: stylized leaf with gentle float
-      return (
-        <div className="flex items-center justify-center" style={{ width: size.w, height: size.h }} aria-label={label}>
-          <svg width={size.w} height={size.h} viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" role="img">
-            <defs>
-              <linearGradient id={`${id}-g`} x1="0%" x2="100%">
-                <stop offset="0%" stopColor={colors[0]} />
-                <stop offset="100%" stopColor={colors[1]} />
-              </linearGradient>
-            </defs>
-            <rect rx="12" width="120" height="80" fill={`url(#${id}-g)`} />
-            <g transform="translate(20,12)">
-              <path d="M10 40 C30 5, 70 5, 90 40 C70 35, 30 45, 10 40 Z" fill="rgba(255,255,255,0.9)" opacity="0.18" />
-              <path d="M15 40 C30 18, 60 18, 85 40" stroke="white" strokeWidth="3" fill="none" strokeLinecap="round">
-                <animate attributeName="stroke-width" values="2;4;2" dur="3s" repeatCount="indefinite" />
-              </path>
-              <g transform="translate(50,26)">
-                <path d="M0 -12 C8 -10, 12 -6, 0 10" fill="white" opacity="0.95" transform="rotate(-18)">
-                  <animateTransform attributeName="transform" attributeType="XML" type="translate" values="0 0;0 -3;0 0" dur="3s" repeatCount="indefinite" />
-                </path>
-              </g>
-            </g>
-          </svg>
-        </div>
-      );
-    }
-
-    if (tierIndex === 1) {
-      // Sponsor: rocket with flame pulse
-      return (
-        <div className="flex items-center justify-center" style={{ width: size.w, height: size.h }} aria-label={label}>
-          <svg width={size.w} height={size.h} viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" role="img">
-            <defs>
-              <linearGradient id={`${id}-g`} x1="0%" x2="100%">
-                <stop offset="0%" stopColor={colors[0]} />
-                <stop offset="100%" stopColor={colors[1]} />
-              </linearGradient>
-            </defs>
-            <rect rx="12" width="120" height="80" fill={`url(#${id}-g)`} />
-            <g transform="translate(38,12)">
-              <g>
-                <path d="M12 6 C18 6, 26 14, 22 28 C18 40, 8 48, 2 58 L-2 62 L6 60 C18 56, 34 44, 34 32 C34 20, 28 8, 12 6 Z" fill="white" opacity="0.95" transform="scale(0.6)">
-                  <animateTransform attributeName="transform" attributeType="XML" type="translate" values="0 0;0 -4;0 0" dur="2.6s" repeatCount="indefinite" />
-                </path>
-                <g transform="translate(6,52)">
-                  <ellipse rx="6" ry="3" fill="#ffb86b" opacity="0.9">
-                    <animate attributeName="rx" values="6;9;6" dur="0.6s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.6s" repeatCount="indefinite" />
-                  </ellipse>
-                </g>
-              </g>
-            </g>
-          </svg>
-        </div>
-      );
-    }
-
-    // Partner (default): diamond with subtle rotation
-    return (
-      <div className="flex items-center justify-center" style={{ width: size.w, height: size.h }} aria-label={label}>
-        <svg width={size.w} height={size.h} viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg" role="img">
-          <defs>
-            <linearGradient id={`${id}-g`} x1="0%" x2="100%">
-              <stop offset="0%" stopColor={colors[0]} />
-              <stop offset="100%" stopColor={colors[1]} />
-            </linearGradient>
-          </defs>
-          <rect rx="12" width="120" height="80" fill={`url(#${id}-g)`} />
-          <g transform="translate(60,40)">
-            <polygon points="0,-20 18,0 0,20 -18,0" fill="white" opacity="0.92">
-              <animateTransform attributeName="transform" attributeType="XML" type="rotate" values="0;10;0" dur="4s" repeatCount="indefinite" />
-            </polygon>
-            <circle cx="0" cy="0" r="4" fill={colors[1]} opacity="0.95">
-              <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite" />
-            </circle>
-          </g>
-        </svg>
-      </div>
-    );
-  }
+  // Inline logo components and external animated helpers removed to avoid unused-vars linting.
 
   return (
     <div className="h-full w-full flex flex-col overflow-hidden" style={{ background: '#000000' }}>
@@ -367,7 +199,7 @@ export default function Sponsor() {
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
                   whileHover={{ y: -8, scale: 1.01 }}
-                  className={`relative rounded-3xl transition-all duration-300 group overflow-visible p-4 h-full flex min-h-[420px]`}
+                    className={`relative rounded-3xl transition-all duration-300 group overflow-visible p-4 h-full flex min-h-[420px] ${hoveredCard === idx ? 'ring-2 ring-white/10' : ''}`}
                 >
                   {/* Decorative gradient border */}
                   <div className={`absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-white/6 to-transparent opacity-70 blur-sm transform-gpu group-hover:scale-102`} />
