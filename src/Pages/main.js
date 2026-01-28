@@ -13,7 +13,6 @@ import { useImagePreloader, useMediaPreloader, useWindowSize } from "../hooks";
 // Lazy load heavy components
 const Explorer = lazy(() => import("../components/apps/Explorer"));
 const Browser = lazy(() => import("../components/apps/Browser"));
-const Calculator = lazy(() => import("../components/apps/Calculator"));
 const VsCode = lazy(() => import("../components/apps/VsCode"));
 const RecycleBin = lazy(() => import("../components/apps/RecycleBin"));
 const Apps = lazy(() => import("../components/apps/Apps"));
@@ -31,8 +30,6 @@ function Main() {
     explorer: false,
     browser: false,
     chrome: false,
-    edge: false,
-    calculator: false,
     vscode: false,
     recycle: false,
     app: false,
@@ -185,11 +182,12 @@ function Main() {
         key={app.id}
         drag
         dragMomentum={false}
-        style={{ willChange: "transform" }}
+        dragElastic={0}
+        style={{ willChange: "transform", pointerEvents: "auto" }}
+        onDoubleClick={() => toggleWindow(app.action, app.subAction)}
       >
         <div
-          className="desktop-icon w-[4.5rem] flex flex-col justify-start items-center rounded hover:bg-white hover:bg-opacity-10 p-1.5"
-          onDoubleClick={() => toggleWindow(app.action, app.subAction)}
+          className="desktop-icon w-[4.5rem] flex flex-col justify-start items-center rounded hover:bg-white hover:bg-opacity-10 p-1.5 cursor-grab active:cursor-grabbing"
         >
           <img
             src={app.icon}
@@ -208,7 +206,7 @@ function Main() {
 
   // Pre-bind bringToFront and minimize handlers for commonly used windows
   const bringers = useMemo(() => {
-    const names = ["explorer", "recycle", "calculator", "vscode", "destroyer"];
+    const names = ["explorer", "recycle", "vscode", "destroyer"];
     const map = {};
     names.forEach((n) => {
       map[n] = () => bringToFront(n);
@@ -217,7 +215,7 @@ function Main() {
   }, [bringToFront]);
 
   const minimizers = useMemo(() => {
-    const names = ["explorer", "recycle", "calculator", "vscode", "destroyer"];
+    const names = ["explorer", "recycle", "vscode", "destroyer"];
     const map = {};
     names.forEach((n) => {
       map[n] = () => minimizeWindow(n);
@@ -296,7 +294,6 @@ function Main() {
     return {
       browser: makeBounds(WINDOW_SIZES.BROWSER.width, WINDOW_SIZES.BROWSER.height),
       explorer: makeBounds(WINDOW_SIZES.EXPLORER.width, WINDOW_SIZES.EXPLORER.height),
-      calculator: makeBounds(WINDOW_SIZES.CALCULATOR.width, WINDOW_SIZES.CALCULATOR.height),
       vscode: makeBounds(WINDOW_SIZES.VSCODE.width, WINDOW_SIZES.VSCODE.height),
       recycle: makeBounds(WINDOW_SIZES.RECYCLE_BIN.width, WINDOW_SIZES.RECYCLE_BIN.height),
       app: makeBounds(WINDOW_SIZES.APP.width, WINDOW_SIZES.APP.height),
@@ -344,34 +341,33 @@ function Main() {
     };
   }, [videoWallpaper]);
 
-  // Try to enter fullscreen once when the main page loads and
-  // again on the first user click for a more immersive experience.
-  useEffect(() => {
-    const el = document.documentElement;
-
-    const requestFullscreenSafely = () => {
-      if (!document.fullscreenElement && el.requestFullscreen) {
-        el.requestFullscreen().catch(() => {
-          // Ignore failures (e.g., browser blocking without user gesture)
-        });
-      }
-    };
-
-    // Attempt immediately on mount (may be blocked but harmless)
-    requestFullscreenSafely();
-
-    // Also try on the first click anywhere in the window
-    const handleFirstClick = () => {
-      requestFullscreenSafely();
-      window.removeEventListener("click", handleFirstClick);
-    };
-
-    window.addEventListener("click", handleFirstClick);
-
-    return () => {
-      window.removeEventListener("click", handleFirstClick);
-    };
-  }, []);
+  // Fullscreen request disabled - causes issues with some apps (About Me, Chrome, etc.)
+  // useEffect(() => {
+  //   const el = document.documentElement;
+  //
+  //   const requestFullscreenSafely = () => {
+  //     if (!document.fullscreenElement && el.requestFullscreen) {
+  //       el.requestFullscreen().catch(() => {
+  //         // Ignore failures (e.g., browser blocking without user gesture)
+  //       });
+  //     }
+  //   };
+  //
+  //   // Attempt immediately on mount (may be blocked but harmless)
+  //   requestFullscreenSafely();
+  //
+  //   // Also try on the first click anywhere in the window
+  //   const handleFirstClick = () => {
+  //     requestFullscreenSafely();
+  //     window.removeEventListener("click", handleFirstClick);
+  //   };
+  //
+  //   window.addEventListener("click", handleFirstClick);
+  //
+  //   return () => {
+  //     window.removeEventListener("click", handleFirstClick);
+  //   };
+  // }, []);
 
   // Show loading spinner while critical assets are loading
   if (!iconsLoaded || !audiosLoaded) {
@@ -473,7 +469,7 @@ function Main() {
           )}
         </div>
         <div
-          className={`absolute top-0 flex justify-center items-center w-full h-full pointer-events-none`}
+          className={`absolute top-0 flex justify-center items-center w-full h-full pointer-events-none z-30`}
         >
           <div className="pointer-events-auto">
             <StartMenu
@@ -517,17 +513,6 @@ function Main() {
                 bringToFront={bringers.recycle}
                 isMinimized={minimizedWindows.has("recycle")}
                 minimizeWindow={minimizers.recycle}
-              />
-            )}
-            {windows.calculator && (
-              <Calculator
-                isAppOpen={windows.calculator}
-                toggleCalculator={() => toggleWindow("calculator")}
-                bounds={bounds.calculator}
-                isActive={activeWindow === "calculator"}
-                bringToFront={bringers.calculator}
-                isMinimized={minimizedWindows.has("calculator")}
-                minimizeWindow={minimizers.calculator}
               />
             )}
             {windows.vscode && (

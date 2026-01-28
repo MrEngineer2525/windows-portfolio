@@ -1,39 +1,25 @@
-import React, { useState, useEffect } from "react";
-
-function UserProfile({ name }) {
-  const [userInitials, setUserInitials] = useState("");
-
-  useEffect(() => {
-    if (name) {
-      setUserInitials(generateInitials(name));
-    }
-  }, [name]);
-
-  return (
-    <div className="flex items-center justify-center w-36 h-full bg-blue-500 rounded-full text-white text-2xl font-bold select-none">
-      {name ? (
-        <div className="text-white text-4xl font-normal">{userInitials}</div>
-      ) : (
-        <div className="avatar">
-          <div className="w-24 rounded-full">
-            <img
-              src="https://giffiles.alphacoders.com/532/53236.gif"
-              alt="Profile"
-            />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+import React from "react";
 
 function generateInitials(name) {
-  const words = name.split(" ");
-  const initials = words
-    .map((word) => word.charAt(0))
-    .join("")
-    .toUpperCase();
-  return initials;
+  if (!name) return "CC";
+  const words = name.trim().split(" ").filter(Boolean);
+  const initials = (words[0]?.charAt(0) || "") + (words[1]?.charAt(0) || "");
+  return initials.toUpperCase();
+}
+
+function UserProfile({ name = "Claytone Curthberth" }) {
+  const initials = generateInitials(name);
+
+  return (
+    <div className="flex items-center justify-center w-full h-full">
+      <div className="relative inline-flex items-center justify-center w-36 h-36 rounded-full bg-gradient-to-tr from-cyan-500 to-purple-500 shadow-xl ring-1 ring-white/20">
+        <div className="absolute inset-0 rounded-full bg-white/6" aria-hidden />
+        <div className="text-white text-4xl font-extrabold select-none" aria-hidden>
+          {initials}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export { UserProfile, generateInitials };

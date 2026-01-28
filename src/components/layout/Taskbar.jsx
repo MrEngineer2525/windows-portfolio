@@ -63,28 +63,12 @@ const Taskbar = ({ toggleStart, toggleExplorer, toggleBrowser, windows = {}, tog
     minimizeWindow && minimizeWindow('chrome');
   }, [minimizeWindow]);
 
-  const handleEdgeClick = useCallback(() => {
-    if (windows.edge) {
-      minimizeWindow && minimizeWindow('edge');
-    } else {
-      toggleWindow && toggleWindow('browser', 'edge');
-    }
-  }, [windows.edge, minimizeWindow, toggleWindow]);
-
-  const handleCalculatorClick = useCallback(() => {
-    minimizeWindow && minimizeWindow('calculator');
-  }, [minimizeWindow]);
-
   const handleVsCodeClick = useCallback(() => {
     minimizeWindow && minimizeWindow('vscode');
   }, [minimizeWindow]);
 
   const handleRecycleClick = useCallback(() => {
     minimizeWindow && minimizeWindow('recycle');
-  }, [minimizeWindow]);
-
-  const handleEmojiClick = useCallback(() => {
-    minimizeWindow && minimizeWindow('emoji');
   }, [minimizeWindow]);
 
   const handleSpotifyClick = useCallback(() => {
@@ -96,7 +80,7 @@ const Taskbar = ({ toggleStart, toggleExplorer, toggleBrowser, windows = {}, tog
   }, [minimizeWindow]);
 
   return (
-    <div className="fixed bottom-0 flex justify-between w-full h-12 bg-[#202020] border-t border-neutral-700 select-none pointer-events-auto text-white z-40 py-0.5">
+    <div className="fixed bottom-0 flex justify-between w-full h-12 bg-[#202020] border-t border-neutral-700 select-none pointer-events-auto text-white z-50 py-0.5">
       {/* Left spacer for centering (responsive) */}
       <div className="w-12 sm:w-[15%]" aria-hidden="true" />
 
@@ -113,25 +97,11 @@ const Taskbar = ({ toggleStart, toggleExplorer, toggleBrowser, windows = {}, tog
           alt="File Explorer"
           isActive={windows.explorer}
         />
-        <TaskbarButton
-          onClick={handleEdgeClick}
-          icon="/images/apps/edge.png"
-          alt="Microsoft Edge"
-          isActive={windows.edge}
-        />
         {windows.chrome && (
           <TaskbarButton
             onClick={handleChromeClick}
             icon="/images/apps/chrome.png"
             alt="Google Chrome"
-            isActive={true}
-          />
-        )}
-        {windows.calculator && (
-          <TaskbarButton
-            onClick={handleCalculatorClick}
-            icon="/images/apps/calculator.png"
-            alt="Calculator"
             isActive={true}
           />
         )}
@@ -148,14 +118,6 @@ const Taskbar = ({ toggleStart, toggleExplorer, toggleBrowser, windows = {}, tog
             onClick={handleRecycleClick}
             icon="/images/apps/recyclebin.png"
             alt="Recycle Bin"
-            isActive={true}
-          />
-        )}
-        {windows.emoji && (
-          <TaskbarButton
-            onClick={handleEmojiClick}
-            icon="https://raw.githubusercontent.com/MishanPoudel/Emoji-TicTacToe/main/public/favicon.ico"
-            alt="Emoji TicTacToe"
             isActive={true}
           />
         )}

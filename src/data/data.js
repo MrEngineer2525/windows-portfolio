@@ -25,7 +25,7 @@ const githubLink = "https://github.com/MishanPoudel";
 
 // Profile Description
 export const profileDescription = [
-  "Hey! I'm Mishan Poudel, and I love making websites. There's something satisfying about building stuff on the web and watching it come to life. I enjoy playing around with React, Next.js, TailwindCSS, and other cool tools to create interactive and visually appealing sites. I'm not a professional or anything, just someone who genuinely enjoys coding, learning new things, and bringing creative ideas to the screen. If you're into web dev or just want to chat about projects, feel free to reach out!",
+  "I'm Claytone Curthberth Mhina, a detail-oriented Computer Science graduate with a solid technical background in software development, networking, database systems, and multimedia. Driven by innovation, continuous learning, and the application of modern technologies to solve challenging problems. Based in Dar es Salaam, Tanzania, I specialize in software development, database management, and UI/UX design. I bring expertise in creating custom software solutions, web applications, and IT infrastructure optimization. I'm fluent in English and Swahili, and passionate about building quality software that makes a difference.",
 ];
 
 // Work Experience Template
@@ -332,6 +332,14 @@ const appsData = [
     icon: "https://em-content.zobj.net/thumbs/120/microsoft/319/hammer_1f528.png",
     action: "destroyer",
     size: "w-11 h-11",
+  },
+  {
+    id: 10,
+    name: "Projects",
+    icon: "/images/apps/folder.png",
+    action: "explorer",
+    subAction: "projects",
+    size: "w-18 h-18",
   },
   // Help Me Earn removed
 ];

@@ -395,3 +395,25 @@ label input {
 .chainsaw-shake {
   animation: chainsaw-shake 0.1s infinite;
 }
+
+/* Custom thin scrollbar used by app content panes */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 30, 30, 0.6);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+  border: 1px solid #9ca3af;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+}

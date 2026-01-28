@@ -1,147 +1,176 @@
 import React, { useState, useRef, useCallback, useMemo } from "react";
 import PropTypes from "prop-types";
-import { Parser } from "expr-eval";
-import DraggableWindow from "../shared/DraggableWindow";
-import CalculatorButton from "../shared/CalculatorButton";
-import { CALCULATOR, WINDOW_SIZES } from "../../utils/constants";
-import { calculateWindowBounds } from "../../utils/helpers";
+import Draggable from "react-draggable";
+import { MdMinimize, MdCheckBoxOutlineBlank, MdClose } from "react-icons/md";
+import { WINDOW_SIZES } from "../../utils/constants";
 
-const Calculator = ({ isAppOpen, toggleCalculator, isActive, bringToFront, minimizeWindow, isMinimized }) => {
-  const calculatorRef = useRef(null);
-  const [display, setDisplay] = useState("");
-  const [clickCount, setClickCount] = useState(0);
-  const [lastWasResult, setLastWasResult] = useState(false);
-
-  // Memoize bounds calculation
-  const bounds = useMemo(
-    () => calculateWindowBounds(WINDOW_SIZES.CALCULATOR.width, WINDOW_SIZES.CALCULATOR.height),
-    []
-  );
-
-  // Memoized callback for appending to display
-  const appendToDisplay = useCallback((value) => {
-    // If the last action produced a result, and the next input is a number or dot,
-    // replace the display with that number (typical calculator behavior).
-    const isSingleNumberOrDot = /^[0-9.]$/;
-
-    setDisplay((prevDisplay) => {
-      if (lastWasResult && isSingleNumberOrDot.test(value)) {
-        return value;
-      }
-      // otherwise append as normal
-      return prevDisplay + value;
-    });
-
-    // Any explicit input following a result should clear the "result" state
-    setLastWasResult(false);
-  }, [lastWasResult]);
-
-  // Memoized callback for calculation with easter egg
-  const calculate = useCallback(() => {
-    // Try to evaluate if there's input
-    let result;
-    if (display && display.trim() !== "") {
-      try {
-        result = Parser.evaluate(display);
-      } catch (err) {
-        // evaluation will be handled below
-        result = undefined;
-      }
-    }
-
-    // Increment usage counter (we rely on the previous clickCount value in this call)
-    setClickCount((prev) => prev + 1);
-
-    // Every first calculation (clickCount === 0) and the 5th (clickCount === 4) show the easter egg
-    if (clickCount === 0 || clickCount === 4) {
-      setDisplay(CALCULATOR.EASTER_EGG_MESSAGE);
-      setLastWasResult(true);
-      // reset to 1 so the next sequence continues
-      setClickCount(1);
-      return;
-    }
-
-    // Normal result handling
-    if (result !== undefined && !isNaN(result)) {
-      setDisplay(result.toString());
-      setLastWasResult(true);
-    } else {
-      // Show invalid/error message briefly
-      setDisplay(CALCULATOR.INVALID_INPUT_MESSAGE);
-      setLastWasResult(false);
-      setTimeout(() => setDisplay(""), CALCULATOR.MESSAGE_DURATION);
-    }
-  }, [display, clickCount]);
-
-  // Memoized clear display callback
-  const clearDisplay = useCallback(() => {
-    setDisplay("");
-  }, []);
-
-  // Simplified calculator: no extra result UI handlers
-
-  // Calculator button configuration
-  const buttons = useMemo(() => [
-    { label: "AC", onClick: clearDisplay, variant: "function" },
-    { label: "x2", onClick: () => appendToDisplay("*2"), variant: "function" },
-    { label: "%", onClick: () => appendToDisplay("%"), variant: "function" },
-    { label: "/", onClick: () => appendToDisplay("/"), variant: "operator" },
-    { label: "7", onClick: () => appendToDisplay("7"), variant: "number" },
-    { label: "8", onClick: () => appendToDisplay("8"), variant: "number" },
-    { label: "9", onClick: () => appendToDisplay("9"), variant: "number" },
-    { label: "x", onClick: () => appendToDisplay("*"), variant: "operator" },
-    { label: "4", onClick: () => appendToDisplay("4"), variant: "number" },
-    { label: "5", onClick: () => appendToDisplay("5"), variant: "number" },
-    { label: "6", onClick: () => appendToDisplay("6"), variant: "number" },
-    { label: "-", onClick: () => appendToDisplay("-"), variant: "operator" },
-    { label: "1", onClick: () => appendToDisplay("1"), variant: "number" },
-    { label: "2", onClick: () => appendToDisplay("2"), variant: "number" },
-    { label: "3", onClick: () => appendToDisplay("3"), variant: "number" },
-    { label: "+", onClick: () => appendToDisplay("+"), variant: "operator" },
-    { label: "0", onClick: () => appendToDisplay("0"), variant: "number", colSpan: 2 },
-    { label: ".", onClick: () => appendToDisplay("."), variant: "number" },
-    { label: "=", onClick: calculate, variant: "operator" },
-  ], [appendToDisplay, calculate, clearDisplay]);
+const CalculatorButton = ({ label, onClick, variant = "number", colSpan = 1 }) => {
+  const baseStyles = "h-12 rounded font-bold text-lg transition-all active:scale-95";
+  const variants = {
+    number: "bg-neutral-700 hover:bg-neutral-600 text-white",
+    operator: "bg-cyan-600 hover:bg-cyan-500 text-white",
+    function: "bg-neutral-600 hover:bg-neutral-500 text-white",
+  };
 
   return (
-    <DraggableWindow
-      isOpen={isAppOpen}
-      isMinimized={isMinimized}
-      title="Calculator"
-      onClose={toggleCalculator}
-      onMinimize={minimizeWindow}
-      bounds={bounds}
-      windowRef={calculatorRef}
-      className="w-[34em] h-[50em]"
-      isActive={isActive}
-      bringToFront={bringToFront}
+    <button
+      onClick={onClick}
+      className={`${baseStyles} ${variants[variant]} ${colSpan > 1 ? `col-span-${colSpan}` : ""}`}
     >
-      <div className="select-none text-center flex justify-center">
-        <div className="top-[10px] bg-neutral-900 mx-auto p-20 shadow-lg text-white h-screen">
-          <input
-            type="text"
-            value={display}
-            className="w-full mb-10 px-4 py-3 text-3xl rounded-lg bg-transparent shadow-inner text-right"
-            placeholder="0"
-            disabled
-            aria-label="Calculator display"
-          />
-          
-          <div className="grid grid-cols-4 gap-3 text-2xl font-light">
-            {/* Calculator buttons */}
-            {buttons.map((button, index) => (
-              <CalculatorButton
-                key={`${button.label}-${index}`}
-                label={button.label}
-                onClick={button.onClick}
-                variant={button.variant}
-                colSpan={button.colSpan}
-              />
-            ))}
+      {label}
+    </button>
+  );
+};
+
+const Calculator = ({
+  isAppOpen,
+  toggleCalculator,
+  isActive = false,
+  bringToFront,
+  minimizeWindow,
+  isMinimized = false,
+  bounds,
+}) => {
+  const calculatorRef = useRef(null);
+  const [display, setDisplay] = useState("0");
+  const [previousValue, setPreviousValue] = useState(null);
+  const [operation, setOperation] = useState(null);
+  const [waitingForNewValue, setWaitingForNewValue] = useState(false);
+
+  const handleNumberClick = useCallback((num) => {
+    if (waitingForNewValue) {
+      setDisplay(String(num));
+      setWaitingForNewValue(false);
+    } else {
+      setDisplay(display === "0" ? String(num) : display + num);
+    }
+  }, [display, waitingForNewValue]);
+
+  const handleOperation = useCallback((op) => {
+    const currentValue = parseFloat(display);
+
+    if (previousValue === null) {
+      setPreviousValue(currentValue);
+    } else if (operation) {
+      const result = performCalculation(previousValue, currentValue, operation);
+      setDisplay(String(result));
+      setPreviousValue(result);
+    }
+
+    setOperation(op);
+    setWaitingForNewValue(true);
+  }, [display, previousValue, operation]);
+
+  const performCalculation = (prev, current, op) => {
+    switch (op) {
+      case "+":
+        return prev + current;
+      case "-":
+        return prev - current;
+      case "*":
+        return prev * current;
+      case "/":
+        return prev / current;
+      default:
+        return current;
+    }
+  };
+
+  const handleEquals = useCallback(() => {
+    if (operation && previousValue !== null) {
+      const result = performCalculation(previousValue, parseFloat(display), operation);
+      setDisplay(String(result));
+      setPreviousValue(null);
+      setOperation(null);
+      setWaitingForNewValue(true);
+    }
+  }, [display, operation, previousValue]);
+
+  const handleClear = useCallback(() => {
+    setDisplay("0");
+    setPreviousValue(null);
+    setOperation(null);
+    setWaitingForNewValue(false);
+  }, []);
+
+  const handleDecimal = useCallback(() => {
+    if (waitingForNewValue) {
+      setDisplay("0.");
+      setWaitingForNewValue(false);
+    } else if (!display.includes(".")) {
+      setDisplay(display + ".");
+    }
+  }, [display, waitingForNewValue]);
+
+  if (!isAppOpen || isMinimized) return null;
+
+  return (
+    <div
+      className={`${isActive ? "z-40" : "z-30"} w-full h-screen pointer-events-none absolute transition-none`}
+    >
+      <Draggable handle=".title-bar" nodeRef={calculatorRef} bounds={bounds}>
+        <div
+          ref={calculatorRef}
+          className="window bg-neutral-900 h-auto w-80 rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
+          onMouseDown={bringToFront}
+        >
+          <div className="title-bar bg-neutral-800 text-white h-9 w-full flex justify-between items-center select-none">
+            <div className="ml-4 font-normal text-sm">Calculator</div>
+            <div className="flex">
+              <button
+                className="hover:bg-neutral-700 w-11 h-9 flex justify-center items-center text-xl"
+                onClick={minimizeWindow}
+              >
+                <MdMinimize />
+              </button>
+              <button className="hover:bg-neutral-700 w-11 h-9 flex justify-center items-center text-sm">
+                <MdCheckBoxOutlineBlank />
+              </button>
+              <button
+                className="hover:bg-red-700 w-12 h-9 flex justify-center items-center text-xl"
+                onClick={toggleCalculator}
+              >
+                <MdClose />
+              </button>
+            </div>
+          </div>
+
+          <div className="p-4 bg-neutral-900">
+            <input
+              type="text"
+              value={display}
+              className="w-full mb-4 px-4 py-3 text-3xl rounded-lg bg-neutral-800 text-white text-right shadow-inner border border-neutral-700"
+              disabled
+              readOnly
+            />
+
+            <div className="grid grid-cols-4 gap-2">
+              <CalculatorButton label="AC" onClick={handleClear} variant="function" colSpan={2} />
+              <CalculatorButton label="/" onClick={() => handleOperation("/")} variant="operator" />
+              <CalculatorButton label="*" onClick={() => handleOperation("*")} variant="operator" />
+
+              <CalculatorButton label="7" onClick={() => handleNumberClick(7)} />
+              <CalculatorButton label="8" onClick={() => handleNumberClick(8)} />
+              <CalculatorButton label="9" onClick={() => handleNumberClick(9)} />
+              <CalculatorButton label="-" onClick={() => handleOperation("-")} variant="operator" />
+
+              <CalculatorButton label="4" onClick={() => handleNumberClick(4)} />
+              <CalculatorButton label="5" onClick={() => handleNumberClick(5)} />
+              <CalculatorButton label="6" onClick={() => handleNumberClick(6)} />
+              <CalculatorButton label="+" onClick={() => handleOperation("+")} variant="operator" />
+
+              <CalculatorButton label="1" onClick={() => handleNumberClick(1)} />
+              <CalculatorButton label="2" onClick={() => handleNumberClick(2)} />
+              <CalculatorButton label="3" onClick={() => handleNumberClick(3)} />
+              <CalculatorButton label="=" onClick={handleEquals} variant="operator" rowSpan={2} />
+
+              <CalculatorButton label="0" onClick={() => handleNumberClick(0)} colSpan={2} />
+              <CalculatorButton label="." onClick={handleDecimal} />
+            </div>
           </div>
         </div>
-      </div>
-    </DraggableWindow>
+      </Draggable>
+    </div>
   );
 };
 
@@ -157,6 +186,7 @@ Calculator.propTypes = {
   bringToFront: PropTypes.func,
   minimizeWindow: PropTypes.func,
   isMinimized: PropTypes.bool,
+  bounds: PropTypes.object,
 };
 
 export default React.memo(Calculator);

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
-import AboutMe from "../apps/AboutMe";
+import AboutMe from "./AboutMe";
 import {
   MdMinimize,
   MdCheckBoxOutlineBlank,
@@ -23,8 +23,10 @@ const NAVIGATION_ITEMS = [
   { id: 'About Me', label: 'About Me', icon: 'me.png' },
   { id: 'Education', label: 'Education', icon: 'edu.png' },
   { id: 'Skills', label: 'Skills', icon: 'skills.png' },
+  { id: 'Projects', label: 'Projects', icon: 'projects.png' },
   { id: 'My Stuffs', label: 'My Stuffs', icon: 'projects.png' },
   { id: 'Resume', label: 'Resume', icon: 'resume.png' },
+  { id: 'Sponsor', label: 'Sponsor', icon: 'teamwork.png' },
 ];
 
 const QUICK_ACCESS_FOLDERS = [
@@ -106,7 +108,6 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
 
   const handleDivClick = (divNumber) => {
     const newExpandedDiv = divNumber === expandedDiv ? 0 : divNumber;
-    // Add to history when expanding/collapsing folders
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push({ page, expandedDiv: newExpandedDiv });
     setHistory(newHistory);
@@ -115,7 +116,6 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
   };
 
   const navigateToPage = (newPage) => {
-    // Add to history and update current position
     const newHistory = history.slice(0, historyIndex + 1);
     newHistory.push({ page: newPage, expandedDiv: 0 });
     setHistory(newHistory);
@@ -150,6 +150,7 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
     const iconMap = {
       "Education": "edu",
       "Skills": "skills",
+      "Projects": "projects",
       "My Stuffs": "projects",
       "Resume": "resume",
       "About Me": "me"
@@ -191,7 +192,7 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
               <MdClose />
             </button>
           </div>
-          <div className="content text-white select-none">
+          <div className="content text-white select-none h-[calc(100%-2rem)] overflow-hidden flex flex-col">
             <div className="absolute bg-neutral-800 top-[6.5px] h-[2em] left-[6px] w-60 rounded-t-lg flex">
               <div className="flex justify-between items-center w-full">
                 <div className="pl-2 text-xs flex">
@@ -315,8 +316,8 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
             </div>
             {aboutMe === true ? (
               <>
-                <div className="flex flex-row h-full bg-neutral-900">
-                  <div className="w-40 h-[100vh] pt-2 border-neutral-700 border-r-[1.5px] px-[2px]">
+                <div className="flex flex-row h-full min-h-0 bg-neutral-900 overflow-hidden">
+                  <div className="w-40 h-full min-h-0 pt-2 border-neutral-700 border-r-[1.5px] px-[2px] overflow-y-auto">
                     <div className="border-b-[1.5px] border-neutral-700 h-20">
                       <div className="flex items-center justify-center mr-8 text-xs hover:bg-neutral-700 w-full h-8 rounded-sm">
                         <img
@@ -351,7 +352,7 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
                       <SidebarItem icon="Network.ico" label="Network" hasChevron />
                     </div>
                   </div>
-                  <div className="border-0 ml-5 mt-2">
+                  <div className="border-0 ml-5 mt-2 flex-1 min-h-0 overflow-y-auto">
                     <div className="flex items-center hover:bg-neutral-700 rounded-md hover:bg-opacity-30">
                       <div className="text-2xl font-extralight">
                         <MdExpandMore />
@@ -381,8 +382,8 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
                 </div>
               </>
             ) : (
-              <div className="flex flex-row h-full bg-neutral-900">
-                <div className="w-40 h-[100vh] pt-2 border-neutral-700 border-r-[1.5px] px-[2px]">
+              <div className="flex flex-row h-full min-h-0 bg-neutral-900">
+                <div className="w-40 h-full min-h-0 pt-2 border-neutral-700 border-r-[1.5px] px-[2px] overflow-y-auto">
                   {NAVIGATION_ITEMS.map((item) => (
                     <SidebarItem
                       key={item.id}
@@ -392,23 +393,14 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
                       onClick={() => navigateToPage(item.id)}
                     />
                   ))}
-                  <a
-                    href="https://github.com/sponsors/MishanPoudel"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center pl-2.5 mr-8 text-xs w-full h-10 rounded-sm hover:bg-neutral-700 text-white bg-neutral-800 border border-black text-center border-opacity-30 gap-2 group"
-                  >
-                    <span className="text-sm ml-5 group-hover:text-red-700">
-                      <MdFavorite />
-                    </span>
-                    Sponsor
-                  </a>
                 </div>
-                <AboutMe
-                  page={page}
-                  expandedDiv={expandedDiv}
-                  handleDivClick={handleDivClick}
-                />
+                <div className="flex-1 min-h-0 h-full">
+                  <AboutMe
+                    page={page}
+                    expandedDiv={expandedDiv}
+                    handleDivClick={handleDivClick}
+                  />
+                </div>
               </div>
             )}
           </div>
