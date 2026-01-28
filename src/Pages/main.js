@@ -425,7 +425,7 @@ function Main() {
         {/* Video wallpaper (covers entire desktop when enabled) */}
         {videoWallpaper && (
           <video
-            src="/videos/messi.mp4"
+            src="https://res.cloudinary.com/dwpfd5nak/video/upload/v1769564984/messi_a3ppw3.mp4"
             autoPlay
             muted
             loop
