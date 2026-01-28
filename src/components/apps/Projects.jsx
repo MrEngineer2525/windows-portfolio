@@ -503,10 +503,17 @@ const Projects = () => {
               </div>
 
               <div className="mt-5 flex gap-3">
-                <a href="#projects" className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-5 py-3 rounded-2xl font-bold text-white shadow-lg transition-transform duration-300 ease-in-out transform-gpu hover:-translate-y-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('projects');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-5 py-3 rounded-2xl font-bold text-white shadow-lg transition-transform duration-300 ease-in-out transform-gpu hover:-translate-y-1"
+                >
                   View Case Studies
                   <FaChevronRight />
-                </a>
+                </button>
                 <a href="mailto:claytonecurth@gmail.com" className="inline-flex items-center gap-2 border border-white/10 px-4 py-3 rounded-2xl text-sm font-bold text-neutral-200 hover:bg-neutral-800/60 transition-colors duration-300">
                   Hire Me
                 </a>
