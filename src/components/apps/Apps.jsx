@@ -104,13 +104,14 @@ function Apps({ isAppOpen, toggleApp, bounds, input, isActive = false, bringToFr
                   <iframe
                     title="Spotify"
                     style={{ borderRadius: "20px", border: "2px solid black" }}
-                    src="https://open.spotify.com/embed/playlist/3rxbSirTaXLDgKUOKzLpYL?utm_source=generator&theme=0"
+                    src="https://open.spotify.com/embed/playlist/37i9dQZF1DZ06evO3IAnqo?utm_source=generator"
                     width="100%"
                     height="100%"
                     allowfullscreen=""
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy"
                   ></iframe>
+    
                 )}
               </div>
             </div>
