@@ -1,4 +1,4 @@
-# <div style="margin:10px 0px; font-size:50px;" align="center">🖥️ Windows 11</div>
+# <div style="margin:10px 0px; font-size:50px;" align="center">🖥️ Windows 11 by Claytone Curthberth</div>
 
 Welcome to the **Windows Clone** app built with **React.js**! 🎉 Dive into this interactive simulation of the Windows operating system, packed with apps and features to play around with. Let’s get started!
 
@@ -24,7 +24,7 @@ To get this project running on your local machine, follow these simple steps:
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/MishanPoudel/Windows11-3.0
+   https://github.com/MrEngineer2525/windows-portfolio.git
    ```
 
 2. **Navigate to the project directory:**
@@ -68,11 +68,11 @@ Want to contribute? We’d love your help! Fork the repository, make your change
 
 ## <div style="margin-left:10px;">⭐ Support
 
-If you enjoy this project or find it useful, please consider giving it a star on [GitHub](https://github.com/MishanPoudel/Windows11-3.0). Your support means a lot and helps encourage further development! 🌟
+If you enjoy this project or find it useful, please consider giving it a star on [GitHub](https://github.com/MrEngineer2525/windows-portfolio.git). Your support means a lot and helps encourage further development! 🌟
 
 ## <div style="margin-left:10px;"> Contact
 
-Got questions or feedback? Reach out at [your-email@example.com](mailto:poudelmishan2@gmail.com). We’d love to hear from you!
+Got questions or feedback? Reach out at [your-email@example.com](mailto:claytonecurth@gmail.com). We’d love to hear from you!
 
 ## <div style="margin-left:10px;">🚧 Note
 
@@ -94,9 +94,7 @@ I’m a beginner in React.js and web development, so my code might not be perfec
     <img src="public/screenshots/aboutme.png" alt="aboutme" width="400px"">
 </p>
 
-## <div style="margin-left:10px;"> 💡 Inspiration
 
-This project was slightly inspired by [Vivek Patel's portfolio](https://vivek9patel.github.io/). Check it out for more creative ideas and inspiration!
 
 <p align="center">
   <img src="https://i.pinimg.com/originals/d8/55/a2/d855a216c91d7d79fec9ec14c12d9a9b.gif" alt="gif" width="100%">
