@@ -117,7 +117,7 @@ const RecycleBin = ({
       <Draggable handle=".title-bar" nodeRef={explorerRef} bounds={bounds}>
         <div
           ref={explorerRef}
-          className="window bg-black h-[39rem] w-[70.5rem] rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
+          className="window bg-black h-[80vh] md:h-[39rem] w-[calc(100vw-2rem)] md:w-[70.5rem] max-w-full rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
           onMouseDown={bringToFront}
         >
           <div className="title-bar" onMouseDown={bringToFront}>
@@ -286,7 +286,7 @@ const RecycleBin = ({
               </div>
             </div>
             <div className="flex flex-row h-full bg-neutral-900">
-              <div className="w-40 h-[100vh] pt-2 border-neutral-700 border-r-[1.5px] px-[2px] bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950">
+              <div className="w-40 md:h-[100vh] h-auto pt-2 border-neutral-700 border-r-[1.5px] px-[2px] bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-950">
                 <div className="border-b-[1.5px] border-neutral-700 h-20">
                   <div className="flex items-center justify-center mr-8 text-xs hover:bg-neutral-700 w-full h-8 rounded-sm">
                     <img

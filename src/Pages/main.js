@@ -187,7 +187,7 @@ function Main() {
         onDoubleClick={() => toggleWindow(app.action, app.subAction)}
       >
         <div
-          className="desktop-icon w-[4.5rem] flex flex-col justify-start items-center rounded hover:bg-white hover:bg-opacity-10 p-1.5 cursor-grab active:cursor-grabbing"
+          className="desktop-icon w-[3.6rem] md:w-[4.5rem] flex flex-col justify-start items-center rounded hover:bg-white hover:bg-opacity-10 p-1.5 cursor-grab active:cursor-grabbing"
         >
           <img
             src={app.icon}

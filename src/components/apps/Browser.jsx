@@ -136,7 +136,7 @@ function Browser({ isAppOpen, toggleBrowser, bounds, isActive = false, bringToFr
         <Draggable handle=".title-bar" nodeRef={explorerRef} bounds={bounds}>
           <div
             ref={explorerRef}
-            className="window bg-black h-[45rem] w-[70.5rem] rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
+            className="window bg-black h-[80vh] md:h-[45rem] w-[calc(100vw-2rem)] md:w-[70.5rem] max-w-full rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
             onMouseDown={bringToFront}
           >
             <TitleBar toggleBrowser={handleCloseBrowser} bringToFront={bringToFront} />
@@ -147,7 +147,7 @@ function Browser({ isAppOpen, toggleBrowser, bounds, isActive = false, bringToFr
                 url={url} 
                 setUrl={setUrl}
               />
-              <div className="h-[50em]">
+              <div className="h-[60vh] md:h-[50em]">
                 <div className="h-full w-full flex flex-col flex-grow">
                   <iframe 
                     ref={iframeRef}

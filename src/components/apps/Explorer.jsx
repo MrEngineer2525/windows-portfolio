@@ -166,7 +166,7 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
       <Draggable handle=".title-bar" nodeRef={explorerRef} bounds={bounds}>
         <div
           ref={explorerRef}
-          className="window bg-black h-[39rem] w-[70.5rem] rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
+          className="window bg-black h-[80vh] md:h-[39rem] w-[calc(100vw-2rem)] md:w-[70.5rem] max-w-full rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
           onMouseDown={bringToFront}
         >
           <div className="title-bar bg-neutral-900 text-white h-8 w-full flex justify-end items-center select-none" onMouseDown={bringToFront}>
@@ -358,7 +358,7 @@ const Explorer = ({ isExplorerOpen, toggleExplorer, aboutMe, bounds, isActive = 
                       </div>
                       <div className="text-xs ml-3 mr-4">Quick access</div>
                     </div>
-                    <div className="h-32 w-[87vh] mr-32 grid grid-cols-3 grid-rows-2">
+                    <div className="h-32 w-full md:w-[87vh] md:mr-32 grid grid-cols-3 grid-rows-2">
                       {QUICK_ACCESS_FOLDERS.map((folder) => (
                         <FolderCard key={folder.name} folder={folder} />
                       ))}

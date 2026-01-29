@@ -51,7 +51,7 @@ function RightClick({ option }) {
           role="menu"
           aria-labelledby="context-menu"
         >
-          <div className="w-[15rem] text-gray-300">
+          <div className="w-[90vw] md:w-[15rem] text-gray-300">
             {option ? (
               <>
                 <MenuItem text="View" showArrow />

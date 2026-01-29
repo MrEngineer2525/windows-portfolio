@@ -36,7 +36,7 @@ function Apps({ isAppOpen, toggleApp, bounds, input, isActive = false, bringToFr
           {input === "emoji" ? (
             <div
               ref={windowRef}
-              className="window bg-black h-[45rem] w-[70.5rem] rounded-xl overflow-hidden border-neutral-700 border-[1.5px] font-semibold pointer-events-auto"
+              className="window bg-black h-[80vh] md:h-[45rem] w-[calc(100vw-2rem)] md:w-[70.5rem] max-w-full rounded-xl overflow-hidden border-neutral-700 border-[1.5px] font-semibold pointer-events-auto"
               onMouseDown={bringToFront}
             >
               <div className="title-bar">
@@ -74,7 +74,7 @@ function Apps({ isAppOpen, toggleApp, bounds, input, isActive = false, bringToFr
           ) : input === "spotify" ? (
             <div
               ref={windowRef}
-              className="window bg-black h-[45rem] w-[70.5rem] rounded-xl overflow-hidden border-neutral-700 border-[1.5px] font-semibold pointer-events-auto"
+              className="window bg-black h-[80vh] md:h-[45rem] w-[calc(100vw-2rem)] md:w-[70.5rem] max-w-full rounded-xl overflow-hidden border-neutral-700 border-[1.5px] font-semibold pointer-events-auto"
               onMouseDown={bringToFront}
             >
               <div className="title-bar">
@@ -118,7 +118,7 @@ function Apps({ isAppOpen, toggleApp, bounds, input, isActive = false, bringToFr
           ) : input === "terminal" ? (
             <div
               ref={windowRef}
-              className="window bg-neutral-800 h-[45rem] w-[70.5rem] rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
+              className="window bg-neutral-800 h-[80vh] md:h-[45rem] w-[calc(100vw-2rem)] md:w-[70.5rem] max-w-full rounded-xl overflow-hidden border-neutral-700 border-[1.5px] pointer-events-auto"
               onMouseDown={bringToFront}
             >
               <div className="title-bar">
@@ -152,7 +152,7 @@ function Apps({ isAppOpen, toggleApp, bounds, input, isActive = false, bringToFr
                   <MdAdd />
                 </div>
               </div>
-              <div className="bg-black text-white h-screen p-4 font-mono">
+              <div className="bg-black text-white h-[60vh] md:h-[40rem] p-4 font-mono overflow-auto">
                 <div className="">Windows PowerShell</div>
                 <div className="text-sm">
                   Copyright (C) Microsoft Corporation. All rights reserved.
